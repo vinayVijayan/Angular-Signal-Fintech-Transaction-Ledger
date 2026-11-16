@@ -1,0 +1,40 @@
+.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; font-family: system-ui, sans-serif; }
+    .top-bar, .toolbar, .header-actions, .filters, .sim-buttons { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .top-bar { justify-content: space-between; margin-bottom: 20px; }
+    h1 { margin: 0; font-size: 1.5rem; }
+    .subtitle { margin: 4px 0 0; color: #64748b; font-size: 0.9rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+    .card-alert { border-color: #fecaca; background: #fef2f2; }
+    .card .label { display: block; font-size: 0.85rem; color: #64748b; margin-bottom: 6px; }
+    .card strong { font-size: 1.4rem; }
+    .toolbar { justify-content: space-between; margin-bottom: 14px; }
+    input, select, button { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; cursor: pointer; }
+    input { cursor: text; min-width: 220px; }
+    button.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+    button.danger { background: #dc2626; color: #fff; border-color: #dc2626; }
+    button.approve-btn { background: #16a34a; color: #fff; border: none; padding: 5px 10px; }
+
+    /* Virtual Scroll Grid Layout */
+    .grid-wrapper { border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+    .viewport { height: 500px; width: 100%; }
+    .grid-header, .grid-row {
+      display: grid;
+      grid-template-columns: 120px 110px 1.5fr 90px 130px 110px 100px;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+    }
+    .grid-header { height: 44px; background: #f8fafc; font-weight: 600; }
+    .grid-row { height: 48px; } /* Must match itemSize="48" on the viewport */
+    .merchant-cell { line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .flagged-row { background: #fef2f2; }
+    .risk-note { display: block; color: #dc2626; font-size: 0.72rem; }
+    .mono { font-family: monospace; }
+    .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; background: #e2e8f0; }
+    .badge[data-status="SETTLED"] { background: #dcfce7; color: #166534; }
+    .badge[data-status="FLAGGED"] { background: #fee2e2; color: #991b1b; }
+    .badge[data-status="PENDING"] { background: #fef9c3; color: #854d0e; }
+    .empty { text-align: center; padding: 32px; color: #64748b; }

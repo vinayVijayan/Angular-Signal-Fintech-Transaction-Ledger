@@ -1,0 +1,103 @@
+<div class="container">
+      <header class="top-bar">
+        <div>
+          <h1>FinTech Transaction Monitor</h1>
+          <p class="subtitle">Real-time ledger powered by Angular Signals & CDK Virtual Scroll</p>
+        </div>
+
+        <div class="header-actions">
+          <label>
+            Role:
+            <select [value]="store.role()" (change)="store.role.set($any($event.target).value)">
+              <option value="APPROVER">Compliance Approver</option>
+              <option value="ANALYST">Read-Only Analyst</option>
+            </select>
+          </label>
+          <button (click)="store.exportCsv()">Export CSV</button>
+        </div>
+      </header>
+
+      <section class="kpi-grid">
+        <div class="card">
+          <span class="label">Total Volume</span>
+          <strong>{{ store.kpis().totalVolume | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div class="card">
+          <span class="label">Settled Transactions</span>
+          <strong>{{ store.kpis().settledCount }}</strong>
+        </div>
+        <div class="card card-alert">
+          <span class="label">Flagged Alerts</span>
+          <strong>{{ store.kpis().flaggedCount }}</strong>
+        </div>
+      </section>
+
+      <section class="toolbar">
+        <input
+          type="text"
+          placeholder="Search ID or merchant..."
+          [value]="store.searchText()"
+          (input)="store.searchText.set($any($event.target).value)" />
+
+        <div class="filters">
+          @for (tab of tabs; track tab) {
+            <button
+              [class.active]="store.statusFilter() === tab"
+              (click)="store.statusFilter.set(tab)">
+              {{ tab }}
+            </button>
+          }
+        </div>
+
+        <div class="sim-buttons">
+          <button (click)="store.toggleLiveStream()">
+            {{ store.isLive() ? 'Pause Live Stream' : 'Start Live Stream' }}
+          </button>
+          <button class="danger" (click)="store.addTransaction(true)">
+            + Simulate Fraud Alert
+          </button>
+        </div>
+      </section>
+
+      <div class="grid-wrapper">
+        <div class="grid-header">
+          <span>Txn ID</span>
+          <span>Time</span>
+          <span>Merchant</span>
+          <span>Method</span>
+          <span>Amount</span>
+          <span>Status</span>
+          <span>Action</span>
+        </div>
+
+        @if (store.filteredTransactions().length === 0) {
+          <div class="empty">No matching transactions found.</div>
+        } @else {
+          <cdk-virtual-scroll-viewport itemSize="48" class="viewport">
+            <div
+              *cdkVirtualFor="let tx of store.filteredTransactions(); trackBy: trackById"
+              class="grid-row"
+              [class.flagged-row]="tx.status === 'FLAGGED'">
+              <span class="mono">{{ tx.id }}</span>
+              <span>{{ tx.time }}</span>
+              <span class="merchant-cell">
+                {{ tx.merchant }}
+                @if (tx.riskNote) {
+                  <small class="risk-note">{{ tx.riskNote }}</small>
+                }
+              </span>
+              <span>{{ tx.method }}</span>
+              <span class="mono">{{ tx.amount | currency:'INR':'symbol':'1.0-0' }}</span>
+              <span><span class="badge" [attr.data-status]="tx.status">{{ tx.status }}</span></span>
+              <span>
+                @if (tx.status === 'FLAGGED' && store.role() === 'APPROVER') {
+                  <button class="approve-btn" (click)="store.approveTransaction(tx.id)">
+                    Approve
+                  </button>
+                }
+              </span>
+            </div>
+          </cdk-virtual-scroll-viewport>
+        }
+      </div>
+    </div>
